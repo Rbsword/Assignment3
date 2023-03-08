@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment_3_Riva_Sword.Models;
 using Assignment_3_Riva_Sword.Data;
+using Tweetinvi;
 
 namespace Assignment_3_Riva_Sword.Controllers
 {
@@ -39,8 +40,38 @@ namespace Assignment_3_Riva_Sword.Controllers
             {
                 return NotFound();
             }
+            var actorVM = new ActorVM();
+            actorVM.Actor = actor;
 
-            return View(actor);
+            var userClient = new TwitterClient("AAx9UfdCemph0Pg0t8Moq5c6L", "LbhoERpFGjBESYSNjTHuRvE0R80cGxZBx5lJWanM5lFpO2Hs63", "1455230009153503238-WTxQgoYUAQ3D9PTSsUu8stHkmJvuVe", "2ZVnM9tWbCSNAhyJcyC4WPIgiIbUWZ77MTLSx2Qb8TkW3");
+            var searchResponse = await userClient.SearchV2.SearchTweetsAsync(actor.Name);
+            var tweets = searchResponse.Tweets;
+            
+            
+            int totalNonZeroTweets = 0;
+            double totalSentimentScore = 0;
+            //Loop all tweets, caculate sentiment for each tweet
+            foreach (var tweet in tweets)
+            {
+                Tweet newTweet= new Tweet();
+                newTweet.TweetText = tweet.Text;
+                //do sentiment and set it
+                newTweet.TweetSentiment = CalculateSentiment(tweet.Text);
+                //add tweets to actorVM
+                actorVM.ActorTweets.Add(newTweet);
+                if (newTweet.TweetSentiment != 0)
+                {
+                    //add up all non-zero tweets (sentiment score)
+                    totalNonZeroTweets++;
+                    
+                }
+            }
+            
+            actorVM.ActorSentiment = totalSentimentScore / totalNonZeroTweets;
+
+            //add the score you calculate above to the actorVM
+            //package up tweets, actor, and total score and pass it to View
+            return View(actorVM);
         }
 
         // GET: Actors/Create

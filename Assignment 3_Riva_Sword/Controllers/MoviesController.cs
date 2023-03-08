@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment_3_Riva_Sword.Data;
 using Assignment_3_Riva_Sword.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Assignment_3_Riva_Sword.Controllers
 {
+
     public class MoviesController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -18,11 +18,17 @@ body {
 }
 
 .HomeBody {
-    background-image: url('../image/red-curtain-1203512.jpg');
+    background-image: url('../image/wallpaper+roll.webp');
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+footer {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
 }
 
 button {
